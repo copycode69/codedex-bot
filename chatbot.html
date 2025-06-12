@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Codedex Beta AI Assistant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <style>
+   
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
+      background-image: url('/public/image/logo.gif'); /* Correct path */
+      background-position: center;
+      background-repeat: no-repeat; 
+      height: 700px;
+      width: 400px;
+    }
+
+    .chat-bot-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+    }
+
+    .chat-toggle {
+    background: rgb(1, 1, 1);
+    color: #ffffff;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    position: fixed;         /* Fix to screen */
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+  }
+
+    .chat-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .pulse-effect {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background-color: rgba(47, 115, 54, 0.4);
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    
+
+    .chat-window {
+      width: 380px;
+      height: 520px;
+      color: rgb(0, 0, 0);
+      background: #e66565;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      position: relative;
+      transform-origin: bottom right;
+      animation: scaleIn 0.3s ease-out forwards;
+    }
+
+    .chat-toggle {
+  background: rgb(1, 1, 1);
+  color: #ffffff;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  position: fixed;         /* Fix to screen */
+  bottom: 20px;
+  right: 20px;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.chat-window {
+  width: 380px;
+  height: 520px;
+  color: rgb(0, 0, 0);
+  background: #e66565;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+  position: fixed;         /* Also fixed */
+  bottom: 100px;           /* Appears above the button */
+  right: 20px;
+  transform-origin: bottom right;
+  animation: scaleIn 0.3s ease-out forwards;
+  z-index: 999;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+    .chat-header {
+      background:rgb(152, 104, 180);
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .chat-header h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      background-color: #00fa68;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #00ff99;
+      margin-right: 8px;
+      animation: pulseStatus 1.5s infinite;
+    }
+
+    @keyframes pulseStatus {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .header-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .header-btn:hover {
+      background: rgba(224, 74, 74, 0.3);
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background-color: var(--bg-alt);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      position: relative;
+    }
+
+    .message {
+      display: flex;
+      flex-direction: column;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .message.bot {
+      align-items: flex-start;
+    }
+
+    .message.user {
+      align-items: flex-end;
+    }
+
+    .message.bot .message-content {
+      background-color: rgb(194, 179, 179);
+      border-radius: 18px 18px 18px 6px;
+      position: relative;
+    }
+
+    .message.bot .message-content::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -10px;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle at 0 0, rgba(0,0,0,0) 20px, var(--bot-bg) 0);
+    }
+
+    .message.user .message-content {
+      background: black;
+      color: #fff;
+      border-radius: 18px 18px 6px 18px;
+      position: relative;
+    }
+
+    .message.user .message-content::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: -10px;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle at 100% 0, rgba(190, 122, 122, 0) 20px, var(--primary) 0);
+    }
+
+    .message-content {
+      padding: 12px 16px;
+      max-width: 85%;
+      word-wrap: break-word;
+      line-height: 1.5;
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background: black;
+      color: #fff;
+    }
+
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      font-size: 14px;
+      position: absolute;
+      bottom: 0;
+      left: -40px;
+    }
+
+    .message-timestamp {
+      font-size: 11px;
+      color: rgb(0, 0, 0);
+      margin-top: 5px;
+      font-weight: 300;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 15px;
+      border-top: 1px solid #333;
+      background-color: rgb(195, 175, 175);
+    }
+
+    .chat-input input {
+      flex: 1;
+      background-color: #ffffff;
+      color: #000000;
+      border: 1px solid #444;
+      border-radius: 12px;
+      padding: 12px 16px;
+      outline: none;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    .chat-input input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(15, 98, 254, 0.2);
+    }
+
+    .chat-input button {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      margin-left: 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .chat-input button:hover {
+      background: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .chat-input button:active {
+      transform: translateY(0);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      background-color: white;
+      border-radius: 18px;
+      width: fit-content;
+      margin-top: 5px;
+    }
+
+    .typing-indicator span {
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin: 0 2px;
+      animation: bounce 1.3s infinite;
+    }
+
+    .typing-indicator span:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+    
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .chat-footer {
+      padding: 12px 15px;
+      background:white;
+      color: var(--text-muted);
+      font-size: 12px;
+      text-align: center;
+      border-top: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .chat-footer a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .chat-footer a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    .welcome-container {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .welcome-container h2 {
+      color: var(--primary-light);
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+
+    .welcome-container p {
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .suggestion {
+      background: rgba(15, 98, 254, 0.15);
+      color: var(--primary-light);
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid rgba(15, 98, 254, 0.3);
+    }
+
+    .suggestion:hover {
+      background: rgba(15, 98, 254, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .powered-by {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      color: rgb(255, 255, 255);
+      font-size: 12px;
+    }
+
+    
+    
+
+    .code-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      color: #9cdcfe;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #9cdcfe;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .message-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      justify-content: flex-end;
+    }
+
+    .action-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--text-muted);
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: rgba(0, 0, 0, 0.2);
+      color: white;
+    }
+
+    .feedback {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .feedback-btn {
+      background: rgba(0, 0, 0, 0.1);
+      border: none;
+      color: var(--text-muted);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 12px;
+    }
+
+    .feedback-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .feedback-btn.like:hover {
+      color: var(--success);
+    }
+
+    .feedback-btn.dislike:hover {
+      color: var(--error);
+    }
+
+    @media (max-width: 500px) {
+      .chat-window {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        bottom: 0;
+        right: 0;
+      }
+      
+      .chat-toggle {
+        bottom: 20px;
+        right: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-bot-container">
+  <div class="chat-toggle" onclick="toggleChat()">
+    <i class="fas fa-robot"></i>
+    <div class="pulse-effect"></div>
+  </div>
+
+  <div class="chat-window" id="chat-window">
+    <div class="chat-header">
+      <h3><span class="status-indicator"></span>Codedex AI Assistant</h3>
+      <div class="header-actions">
+        <button class="header-btn" title="Minimize">
+          <i class="fas fa-minus"></i>
+        </button>
+        <button class="header-btn" title="Close" onclick="toggleChat()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="welcome-container">
+        <h2>Welcome to Codedex Assistant</h2>
+        <p>I'm your AI-powered Codedex Assistant your one-stop guide for courses, challenges, platform features, team info, and all things Codedex</p>
+        <div class="suggestions">
+          <div class="suggestion" onclick="sendSuggestion('What is Codedex and how does it work?')">What is Codedex?</div>
+          <div class="suggestion" onclick="sendSuggestion('How do I complete the 30 Nights of Coding challenge?')">30 Nights of Coding</div>
+          <div class="suggestion" onclick="sendSuggestion('Are there any monthly coding challenges on Codedex?')">Monthly Challenges</div>
+        </div>
+        <div class="powered-by">
+          <i class="fas fa-bolt"></i>
+          Powered by Codedex
+        </div>
+      </div>
+      
+      <div class="message bot">
+        <div class="message-avatar bot-avatar">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="message-content">
+          Hello! I'm your Codedex AI Assistant. How can I help you with your Codedex journey
+          <div class="feedback">
+            <button class="feedback-btn like" title="Like this response"><i class="fas fa-thumbs-up"></i></button>
+            <button class="feedback-btn dislike" title="Dislike this response"><i class="fas fa-thumbs-down"></i></button>
+          </div>
+        </div>
+        <div class="message-timestamp">22:45</div>
+      </div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="user-input" placeholder="Enter your message here..." onkeydown="if(event.key==='Enter')sendMessage()">
+      <button onclick="sendMessage()">
+        <i class="fas fa-paper-plane"></i> Send
+      </button>
+    </div>
+    <div class="chat-footer">
+      <span>Codedex AI Assistant v2.1</span>
+      <span>Secure Connection <i class="fas fa-lock"></i></span>
+    </div>
+  </div>
+</div>
+
+<script>
+      const chatWindow = document.getElementById("chat-window");
+  const chatMessages = document.getElementById("chat-messages");
+  const userInput = document.getElementById("user-input");
+
+  function toggleChat() {
+    chatWindow.style.display = chatWindow.style.display === "flex" ? "none" : "flex";
+    if (chatWindow.style.display === "flex") {
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+  }
+
+  function sendMessage() {
+    const msg = userInput.value.trim();
+    if (!msg) return;
+
+    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    // User message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'message user';
+    userMsg.innerHTML = `
+      <div class="message-content">${msg}</div>
+      <div class="message-timestamp">${timestamp}</div>
+    `;
+    chatMessages.appendChild(userMsg);
+    userInput.value = '';
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Typing indicator
+    const typing = document.createElement('div');
+    typing.className = 'message bot typing';
+    typing.innerHTML = `
+      <div class="message-content typing-indicator">Typing...</div>
+    `;
+    chatMessages.appendChild(typing);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Call backend
+    fetch('http://localhost:8000/ask', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ question: msg })
+    })
+    .then(res => res.json())
+    .then(data => {
+      typing.remove();
+      const botMsg = document.createElement('div');
+      botMsg.className = 'message bot';
+      botMsg.innerHTML = `
+        <div class="message-content">${data.answer}</div>
+        <div class="message-timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+      `;
+      chatMessages.appendChild(botMsg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    })
+    .catch(() => {
+      typing.remove();
+      const botMsg = document.createElement('div');
+      botMsg.className = 'message bot';
+      botMsg.innerHTML = `
+        <div class="message-content">❌ Could not reach the backend.</div>
+        <div class="message-timestamp">${timestamp}</div>
+      `;
+      chatMessages.appendChild(botMsg);
+    });
+  }
+
+  
+
+</script>
+</body>
+</html>

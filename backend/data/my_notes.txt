@@ -1,0 +1,127 @@
+CODEDÉX: LEARN CODING & AI THE FUN WAY
+
+INTRODUCTION
+Codédex is a vibrant, gamified learning platform set in a fantasy-themed world where learners embark on quests to master coding and Generative AI. Progress is earned through interactive lessons, projects, and challenges—perfect for students, creators, and anyone who learns best by doing.
+
+Key Features:
+ Accredible-certified certificates (e.g., “The Legend of Python”)
+ The #30 Nites of Code challenge with daily goals and a virtual pet
+ Monthly challenges like UI puzzles and app builds
+ A global, supportive community for feedback and collaboration
+
+Target Audience: Beginners to intermediate learners, hobbyists, students, and creators who enjoy learning by doing.
+
+---
+
+NAVIGATION
+/home              Landing page with overview and featured courses
+/gen-ai            Learn Generative AI (Intro, Models, Tokenization, Prompting)
+/gen-ai/01-gen-ai  First lesson in Gen AI path
+/courses           Explore all available courses
+/lessons           Deep dive into structured coding + AI lessons
+/projects          Build and showcase AI-powered projects
+/community         Join forums, discussions, and monthly hackathons
+/blog              Developer articles, Gen AI updates, coding tips
+/contact           Reach out to the team or support
+/board             Track progress, XP, badges, and lesson streaks
+
+---
+
+PLANS
+
+Free Plan:
+ Access to basic Gen AI and coding courses
+ Gamified lesson path with limited XP
+ No project uploads or certification
+
+Pro Plan:
+ Full access to all courses (AI, Python, JS, HTML/CSS)
+ Projects + AI feedback
+ Monthly code challenges + certificates
+ Access to community mentors
+
+Premium Plan:
+ Everything in Pro +
+ Early access to new lessons
+ Mentor feedback + live office hours
+ Project reviews
+ Lifetime badge
+
+---
+
+LESSONS
+
+Gen AI Path:
+ What is Generative AI?
+ Prompt Engineering Basics
+ Prompt Templates & Fine-tuning
+ Tokenization & Model Inputs
+ Diffusion Models & LLMs
+ OpenAI, Transformers, Hugging Face intro
+ Capstone: Build your own AI chatbot
+
+Python Path:
+ Hello World, Variables, Data Types
+ Loops, Functions, Classes
+ File Handling
+ APIs + JSON
+ Capstone: Python Quiz App
+
+Web Dev Path:
+ HTML Basics
+ CSS Grid + Flexbox
+ Responsive Design
+ JavaScript Basics + DOM
+ Capstone: Personal Portfolio Site
+
+---
+
+PROJECTS
+ Smart Fridge AI Assistant
+ AI-Generated Meme Maker
+ Real-time Code Editor with GPT Hints
+ Image-to-Sketch AI
+ Custom Chatbot with OpenAI API
+ Collaborative Coding Game
+
+---
+
+GAMIFICATION
+ XP (Experience Points) for each lesson and quiz
+ Badges for achievements (e.g., "Prompt Pro", "Token Tamer")
+ Level system from "Coder Egg" -> "AI Owl" -> "Legendary LLM"
+ Streak rewards for daily logins and lesson completions
+ Virtual pet that evolves with learning during #30 Nites of Code
+
+---
+
+COMMUNITY
+/community:
+ Post questions and answers
+ Participate in monthly build challenges
+ Share completed projects
+ Get peer reviews and feedback
+
+Roles:
+ Learner
+ Mentor
+ Moderator
+ Contributor
+
+---
+
+CONTRIBUTIONS
+Ways to contribute:
+ Suggest lesson improvements
+ Report bugs or typos
+ Submit your own challenge idea
+ Create a community tutorial
+ Refer friends for XP
+
+---
+
+CONTACT
+ Email: support@codedex.io
+ Twitter: https://twitter.com/codedexHQ
+ Community: /community
+ Contact form: /contact
